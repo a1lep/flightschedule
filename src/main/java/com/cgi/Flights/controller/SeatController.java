@@ -1,4 +1,4 @@
 package com.cgi.Flights.controller;
 
-public record SeatController() {
+public class SeatController {
 }

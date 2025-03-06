@@ -3,9 +3,7 @@ package com.cgi.Flights.model;
 import java.sql.Date;
 import java.sql.Time;
 
-
-public record Flight(
-        Long id,
+public record FlightRequest(
         String flightNumber,
         String origin,
         String destination,
