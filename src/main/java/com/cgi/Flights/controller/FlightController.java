@@ -17,7 +17,7 @@ public class FlightController {
     private final FlightService flightService;
 
     @GetMapping("/allFlights")
-    public List<Flight> getFlights(){
+    public List<Flight> getAllFlights(){
         return flightService.getAllFlights();
     }
 
