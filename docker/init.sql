@@ -22,3 +22,21 @@ CREATE TABLE IF NOT EXISTS seats (
     is_extra_leg_room BOOLEAN NOT NULL,
     is_close_to_exit BOOLEAN NOT NULL
     );
+
+INSERT INTO seats (flight_id, seat_number, seat_class, seat_row, is_window, is_extra_leg_room, is_close_to_exit)
+SELECT
+    f.id AS flight_id,
+    s.letter AS seat_number,
+    CASE
+        WHEN r.row_number = 1 THEN 'FIRST'
+        WHEN r.row_number BETWEEN 2 AND 5 THEN 'BUSINESS'
+        ELSE 'ECONOMY'
+        END::seat_class_enum AS seat_class,
+        r.row_number AS seat_row,
+    s.letter IN ('A', 'F') AS is_window,
+    r.row_number IN (10, 11) AS is_extra_leg_room,
+    r.row_number IN (1, 10, 11, 20) AS is_close_to_exit
+FROM
+    (SELECT UNNEST(ARRAY[1,2,3,4,5]) AS id) f,
+    (SELECT GENERATE_SERIES(1, 20) AS row_number) r,
+    (SELECT UNNEST(ARRAY['A','B','C','D','E','F']) AS letter) s;

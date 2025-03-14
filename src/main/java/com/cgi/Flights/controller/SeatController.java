@@ -14,9 +14,14 @@ import java.util.List;
 public class SeatController {
     private final SeatService seatService;
 
-    @GetMapping("/allSeats")
-    public List<Seat> getAllSeats() {
-        return seatService.getAllSeats();
+    @GetMapping("/allSeats/{flightId}")
+    public List<Seat> getAllSeats(@PathVariable final Long flightId) {
+        return seatService.getAllSeats(flightId);
+    }
+
+    @GetMapping("/allSeatsByRow/{flightId}")
+    public List<List<Seat>> getAllSeatsByRow(@PathVariable final Long flightId) {
+        return seatService.getAllSeatsByRow(flightId);
     }
 
     @GetMapping("/isWindow/{seatId}")

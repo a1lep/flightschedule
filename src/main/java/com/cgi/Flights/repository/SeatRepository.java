@@ -6,7 +6,8 @@ import java.util.List;
 
 public interface SeatRepository {
 
-    List<Seat> getAllSeats();
+    List<Seat> getAllSeats(Long flightId);
+    List<Seat> getAllSeatsByRow(Long flightId);
     boolean isSeatWindow(Long seatId);
     boolean isSeatExtraLegroom(Long seatId);
     boolean isSeatCloseToExit(Long seatId);

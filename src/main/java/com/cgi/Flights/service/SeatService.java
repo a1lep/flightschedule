@@ -16,8 +16,36 @@ public class SeatService {
 
     private final SeatRepository seatRepository;
 
-    public List<Seat> getAllSeats() {
-        return seatRepository.getAllSeats();
+    public List<Seat> getAllSeats(final Long flightId) {
+        return seatRepository.getAllSeats(flightId);
+    }
+
+    public List<List<Seat>> getAllSeatsByRow(final Long flightId) {
+       final List<Seat> seats = seatRepository.getAllSeatsByRow(flightId);
+        List<List<Seat>> seatsByRow = new ArrayList<>();
+
+        int currentRow = -1;
+        List<Seat> currentRowSeats = null;
+
+        for (Seat seat : seats) {
+            if (seat.row() != currentRow) {
+                if (currentRowSeats != null) {
+                    if (currentRow >= 1 && currentRow <= 20) {
+                        seatsByRow.add(currentRowSeats);
+                    }
+                }
+                currentRow = seat.row();
+                currentRowSeats = new ArrayList<>();
+            }
+
+            currentRowSeats.add(seat);
+        }
+
+        if (currentRowSeats != null && currentRow >= 1 && currentRow <= 20) {
+            seatsByRow.add(currentRowSeats);
+        }
+
+        return seatsByRow;
     }
 
     public boolean isSeatWindow(final Long seatId) {

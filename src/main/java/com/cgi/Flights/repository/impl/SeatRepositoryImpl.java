@@ -19,12 +19,26 @@ public class SeatRepositoryImpl implements SeatRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
     @Override
-    public List<Seat> getAllSeats() {
+    public List<Seat> getAllSeats(Long flightId) {
         final String sql = """
                 SELECT id, flight_id, seat_number, is_available, seat_class, seat_row, is_window, is_extra_leg_room, is_close_to_exit
                 FROM seats
+                WHERE flight_id = :flightId
                 """;
-        return jdbcTemplate.query(sql, (rs, _) -> mapSeats(rs));
+        return jdbcTemplate.query(sql, Map.of("flightId", flightId), (rs, _) -> mapSeats(rs));
+    }
+
+    @Override
+    public List<Seat> getAllSeatsByRow(Long flightId) {
+        final String sql = """
+            SELECT id, flight_id, seat_number, is_available, seat_class, seat_row, is_window, is_extra_leg_room, is_close_to_exit
+            FROM seats
+            WHERE flight_id = :flightId
+            ORDER BY seat_row, seat_number
+            """;
+
+        return jdbcTemplate.query(sql, Map.of("flightId", flightId), (rs, _) -> mapSeats(rs));
+
     }
 
     private Seat mapSeats(final ResultSet rs) throws SQLException {
