@@ -23,7 +23,13 @@ CREATE TABLE IF NOT EXISTS seats (
     is_close_to_exit BOOLEAN NOT NULL
     );
 
-INSERT INTO seats (flight_id, seat_number, seat_class, seat_row, is_window, is_extra_leg_room, is_close_to_exit)
+INSERT INTO flights (flight_number, origin, destination, departure_date, departure_time, flight_duration, price)
+VALUES
+    ('FL123', 'Tallinn', 'Paris', '2025-06-10', '08:00', 4.5, 150.00),
+    ('FL456', 'Paris', 'Rome', '2025-06-11', '09:30', 2.5, 60.00),
+    ('FL789', 'Tallinn', 'Barcelona', '2025-06-12', '14:45', 5.5, 450.00)
+
+    INSERT INTO seats (flight_id, seat_number, seat_class, seat_row, is_window, is_extra_leg_room, is_close_to_exit)
 SELECT
     f.id AS flight_id,
     s.letter AS seat_number,
@@ -34,9 +40,14 @@ SELECT
         END::seat_class_enum AS seat_class,
         r.row_number AS seat_row,
     s.letter IN ('A', 'F') AS is_window,
-    r.row_number IN  (11) AS is_extra_leg_room,
+    r.row_number IN (11) AS is_extra_leg_room,
     r.row_number IN (1, 10, 11, 20) AS is_close_to_exit
-FROM
-    (SELECT UNNEST(ARRAY[1,2,3,4,5]) AS id) f,
-    (SELECT GENERATE_SERIES(1, 20) AS row_number) r,
-    (SELECT UNNEST(ARRAY['A','B','C','D','E','F']) AS letter) s;
+FROM flights f
+         CROSS JOIN (SELECT GENERATE_SERIES(1, 20) AS row_number) r
+         CROSS JOIN LATERAL (
+    SELECT UNNEST(
+                   CASE
+                       WHEN r.row_number BETWEEN 1 AND 5 THEN ARRAY['A', 'C', 'D', 'F'] -- FIRST & BUSINESS (4 seats)
+                       ELSE ARRAY['A', 'B', 'C', 'D', 'E', 'F'] -- ECONOMY (6 seats)
+                       END
+           ) AS letter) s;

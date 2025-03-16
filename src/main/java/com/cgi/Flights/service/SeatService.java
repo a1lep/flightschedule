@@ -39,14 +39,12 @@ public class SeatService {
                 currentRowSeats = new ArrayList<>();
             }
             seat = changeSeatAvailability(seat);
-
             currentRowSeats.add(seat);
         }
 
         if (currentRowSeats != null && currentRow >= 1 && currentRow <= 20) {
             seatsByRow.add(currentRowSeats);
         }
-
         return seatsByRow;
     }
 
