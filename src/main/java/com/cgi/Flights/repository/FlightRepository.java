@@ -10,8 +10,8 @@ public interface FlightRepository {
 
     List<Flight> getAllFlights();
     void addFlight(FlightRequest flightRequest);
-    List<Flight> getFlightByDestination(String destination);
-    List<Flight> getFlightByDuration(Double duration);
+    List<Flight> getFlightByOriginDestination (String origin, String destination);
+    List<Flight> getFlightByDuration (Double minDuration, Double maxDuration);
     List<Flight> getFlightByPrice(Double priceFrom, Double priceTo);
     List<Flight> getFlightByDate(Date departureDate);
 }

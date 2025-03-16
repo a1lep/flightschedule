@@ -34,7 +34,7 @@ SELECT
         END::seat_class_enum AS seat_class,
         r.row_number AS seat_row,
     s.letter IN ('A', 'F') AS is_window,
-    r.row_number IN (10, 11) AS is_extra_leg_room,
+    r.row_number IN  (11) AS is_extra_leg_room,
     r.row_number IN (1, 10, 11, 20) AS is_close_to_exit
 FROM
     (SELECT UNNEST(ARRAY[1,2,3,4,5]) AS id) f,

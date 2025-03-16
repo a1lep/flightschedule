@@ -23,12 +23,12 @@ public class FlightService {
       flightRepository.addFlight(flightRequest);
    }
 
-   public List<Flight> getFlightByDestination(final String destination) {
-      return flightRepository.getFlightByDestination(destination);
+   public List<Flight> getFlightByOriginDestination(final String origin, final String destination) {
+      return flightRepository.getFlightByOriginDestination(origin,destination);
    }
 
-   public List<Flight> getFlightByDuration(final Double duration) {
-      return flightRepository.getFlightByDuration(duration);
+   public List<Flight> getFlightByDuration(Double minDuration, Double maxDuration) {
+      return flightRepository.getFlightByDuration(minDuration, maxDuration);
    }
 
    public List<Flight> getFlightByPrice (final Double priceFrom, final Double priceTo) {

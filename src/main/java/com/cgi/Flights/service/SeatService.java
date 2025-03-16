@@ -14,6 +14,7 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class SeatService {
 
+    private static final double SEAT_AVAILABILITY_MODIFY_PERCENTAGE = 30.0;
     private final SeatRepository seatRepository;
 
     public List<Seat> getAllSeats(final Long flightId) {
@@ -37,6 +38,7 @@ public class SeatService {
                 currentRow = seat.row();
                 currentRowSeats = new ArrayList<>();
             }
+            seat = changeSeatAvailability(seat);
 
             currentRowSeats.add(seat);
         }
@@ -48,6 +50,13 @@ public class SeatService {
         return seatsByRow;
     }
 
+    private Seat changeSeatAvailability(Seat seat) {
+        // Use the configurable percentage to modify the seat availability
+        if (Math.random() < SEAT_AVAILABILITY_MODIFY_PERCENTAGE / 100.0) {
+            return new Seat(seat.id(), seat.flightId(), seat.seatNumber(), false, seat.seatClass(), seat.row(), seat.isWindow(), seat.isExtraLegroom(), seat.isCloseToExit());
+        }
+        return seat; // If not changed, return the seat as is
+    }
     public boolean isSeatWindow(final Long seatId) {
         return seatRepository.isSeatWindow(seatId);
     }

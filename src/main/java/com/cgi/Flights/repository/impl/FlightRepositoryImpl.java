@@ -58,24 +58,24 @@ public class FlightRepositoryImpl implements FlightRepository {
     }
 
     @Override
-    public List<Flight> getFlightByDestination (String destination) {
+    public List<Flight> getFlightByOriginDestination (String origin, String destination) {
         final String sql = """
             SELECT id, flight_number, origin, destination, departure_date, departure_time, flight_duration, price
             FROM flights
-            WHERE destination = :destination
+            WHERE origin= :origin AND destination = :destination
             """;
 
-        return jdbcTemplate.query(sql, Map.of("destination", destination), (rs, _) -> mapFlight(rs));
+        return jdbcTemplate.query(sql, Map.of("origin",origin,"destination", destination), (rs, _) -> mapFlight(rs));
     }
 
     @Override
-    public List<Flight> getFlightByDuration (Double flightDuration) {
+    public List<Flight> getFlightByDuration (Double minDuration, Double maxDuration) {
         final String sql = """
             SELECT id, flight_number, origin, destination, departure_date, departure_time, flight_duration, price
             FROM flights
-            WHERE flight_duration = :flightDuration
+            WHERE flight_duration BETWEEN :minDuration AND :maxDuration
             """;
-        return jdbcTemplate.query(sql, Map.of("flightDuration", flightDuration), (rs, _) -> mapFlight(rs));
+        return jdbcTemplate.query(sql, Map.of("minDuration", minDuration, "maxDuration", maxDuration), (rs, _) -> mapFlight(rs));
     }
 
     @Override

@@ -26,14 +26,16 @@ public class FlightController {
         flightService.addFlight(flightRequest);
     }
 
-    @GetMapping("/flightByDestination/{destination}")
-    public List<Flight> getFlightByDestination(@PathVariable("destination") final String destination){
-        return flightService.getFlightByDestination(destination);
+    @GetMapping("/flightByOriginDestination/{origin}/{destination}")
+    public List<Flight> getFlightByDestination(@PathVariable("origin") final String origin,
+                                               @PathVariable("destination") final String destination){
+        return flightService.getFlightByOriginDestination(origin,destination);
     }
 
-    @GetMapping("/flightByDuration/{duration}")
-    public List<Flight> getFlightByDuration(@PathVariable("duration") final Double duration){
-        return flightService.getFlightByDuration(duration);
+    @GetMapping("/flightByDuration/{minDuration}/{maxDuration}")
+    public List<Flight> getFlightByDuration(@PathVariable("minDuration") final Double minDuration,
+                                            @PathVariable("maxDuration") final Double maxDuration){
+        return flightService.getFlightByDuration(minDuration, maxDuration);
     }
 
     @GetMapping("/flightByPrice/{priceFrom}/{priceTo}")
